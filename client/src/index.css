@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: rgb(241, 245, 241);
+}
+body .fd-col {
+  flex-direction: column;
+}
+button .bg-red {
+  background-color: brown;
+}
