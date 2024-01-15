@@ -13,6 +13,7 @@ import OAuth from "../components/OAuth";
 function SignIn() {
   const [formData, setFormData] = useState({});
   const { loading, error } = useSelector((state) => state.user);
+  console.log(loading);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleChange = (e) => {
@@ -73,14 +74,14 @@ function SignIn() {
         >
           {loading ? "Loading..." : "Sign In"}
         </button>
-        <OAuth/>
+        <OAuth />
       </form>
       <div>
         <div className="flex mt-5 gap-2">
           <p>create an account</p>
           <Link to={"/sign-up"}>
             {" "}
-            <span className="text-blue-700">Sign In</span>
+            <span className="text-blue-700">Sign up</span>
           </Link>
         </div>
         {error ? <p>{error}</p> : <p>i</p>}

@@ -16,18 +16,24 @@ export const updateUser = async (req, res, next) => {
     if (req.body.password) {
       req.bod.password = bcryptjs.hashSync(req.body.password, 10);
     }
-    const updatedUser = await UserModel.findByIdAndUpdate(req.params.id, {
-      $set: {username:req.body.username,
-      email:req.body.email,
-    avater:req.body.avater},
-    },{new:true});
-    const {password, ...rest}=updatedUser._doc;
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set: {
+          username: req.body.username,
+          email: req.body.email,
+          avater: req.body.avater,
+        },
+      },
+      { new: true }
+    );
+    const { password, ...rest } = updatedUser._doc;
     res.status(200).json({
-      success:true,
-      message:"User updated successfully",
-      user:rest
-    })
+      success: true,
+      message: "User updated successfully",
+      user: rest,
+    });
   } catch (error) {
-    next(error)
+    next(error);
   }
 };

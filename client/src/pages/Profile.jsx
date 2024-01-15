@@ -7,6 +7,12 @@ import {
 } from "firebase/storage";
 import { useSelector } from "react-redux";
 import {
+  signOutStart,
+  signOutSuccess,
+  signOutfail,
+  deleteUserStart,
+  deleteUserSuccess,
+  deleteUserfail,
   updateUserStart,
   updateUserSuccess,
   updateUserfail,
@@ -43,6 +49,24 @@ function Profile() {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
+
+  const handleDeleteAccount = async (e) => {
+    e.preventDefault();
+    try {
+      dispatch(signOutStart());
+
+      const response = await fetch(`/api/auth/signout`);
+      const result = await response.json();
+
+      console.log("Success:", result);
+      if (result.success === false) {
+        dispatch(signOutfail(result.message));
+      }
+      dispatch(deleteUserSuccess());
+    } catch (error) {
+      dispatch(deleteUserfail(error.message));
+    }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -62,7 +86,7 @@ function Profile() {
       if (result.success === false) {
         dispatch(updateUserfail(result.message));
       }
-      dispatch(updateUserSuccess(result));
+      dispatch(updateUserSuccess(result.user));
       setUpdateSuccessful(true);
     } catch (error) {
       dispatch(updateUserfail(error.message));
@@ -113,7 +137,7 @@ function Profile() {
         />
         <img
           onClick={() => fileRef.current.click()}
-          src={formData.avater || currentUser.avater}
+          src={formData.avater || currentUser.avater || currentUser.user.avater}
           className="cursor-pointer rounded-full self-center h-24 w-24 object-cover mt-2"
         />
         <p>
@@ -150,19 +174,25 @@ function Profile() {
           id="password"
         />
         <button
+          disabled={loading}
           type="submit"
           onClick={handleSubmit}
           className="bg-slate-700 text-white rounded-lg uppercase hover:opacity-80 p-3 disabled:opacity-80"
         >
-          Update
+          {loading ? "updating..." : "update"}
         </button>
       </form>
       <div>
         <div className="flex mt-5 justify-between  ">
           <span className="text-red-700 cursor-pointer">Delete account</span>
-          <span className="text-red-700 cursor-pointer">Sign out</span>
+          <span
+            className="text-red-700 cursor-pointer"
+            onClick={handleDeleteAccount}
+          >
+            Sign out
+          </span>
         </div>
-        <p className="text-red-700">{error ? error : ""}</p>
+        <p className="text-blue-700">{error ? error : ""}</p>
         <p className="text-green-700">
           {updateSuccesfull ? "Successfully Updated" : ""}
         </p>
