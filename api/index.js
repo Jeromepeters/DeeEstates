@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import test from "./routes/user.route.js";
 import auth from "./routes/auth.route.js";
+import listing from "./routes/listing.route.js";
 
 const app = express();
 app.use(bodyParser.json());
@@ -19,6 +20,7 @@ mongoose
   });
 app.use("/api/auth", auth);
 app.use("/api/user", test);
+app.use("/api/listing", listing);
 
 app.listen(3000, () => {
   console.log("Listening to PORT: 3000");
